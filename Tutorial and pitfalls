@@ -1,0 +1,43 @@
+# install-xgboost-gpu-on-ubuntu-16.04
+
+1. Build the Shared Library¶
+On Ubuntu, one builds xgboost(cpu only) by
+
+git clone --recursive https://github.com/dmlc/xgboost
+cd xgboost; make -j4
+
+for gpu version, build by
+
+Building with GPU support
+XGBoost can be built with GPU support for both Linux and Windows using cmake. GPU support works with the Python package as well as the CLI version. See Installing R package with GPU support for special instructions for R.
+
+An up-to-date version of the CUDA toolkit is required.
+
+From the command line on Linux starting from the xgboost directory:
+
+$ mkdir build
+$ cd build
+$ cmake .. -DUSE_CUDA=ON
+$ make -j
+
+2. install python package
+Python Package Installation
+The python package is located at python-package. There are several ways to install the package:
+
+Install system-widely, which requires root permission
+
+cd python-package; sudo python setup.py install
+You will however need Python distutils module for this to work. It is often part of the core python package or it can be installed using your package manager, e.g. in Debian use
+
+sudo apt-get install python-setuptools
+NOTE: If you recompiled xgboost, then you need to reinstall it again to make the new library take effect
+##### pitfall:
+if you are using anaconda
+sudo python setup.py install will use the system python instead of your anaconda python
+you will see: 
+ImportError: No module named numpy.diutils`_
+
+to fix it, do:
+
+sudo -s
+python setup.py install 
