@@ -1,0 +1,31 @@
+To install a lightGBM-CPU version, simply do
+  source activate root
+  conda install lightgbm
+Or use the anaconda-navigator
+
+To install a lightGBM-GPU version
+1. install OpenCL 1.2 headers and libraries
+by installing ocl-icd-libopencl1 and ocl-icd-opencl-dev
+
+2. install libboost 1.61 or later
+by installing libboost-dev, libboost-system-dev, libboost-filesystem-dev
+
+3. install CMake 3.2 or later
+
+4. install lightGBM－GPU
+git clone --recursive https://github.com/huanzhang12/lightgbm-gpu.git
+cd lightgbm-gpu
+mkdir build ; cd build
+cmake -DUSE_GPU=1 .. 
+make -j$(nproc) 
+
+5. install python package
+install setuptools https://pypi.python.org/pypi/setuptools
+
+cd LightGBM/python-package
+# export CXX=g++-7 CC=gcc-7  # for macOS users only
+python setup.py install --gpu
+
+References:
+https://github.com/huanzhang12/lightgbm-gpu
+https://github.com/Microsoft/LightGBM/tree/master/python-package
