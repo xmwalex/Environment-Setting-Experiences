@@ -1,0 +1,78 @@
+1. First update all packages
+
+    sudo apt-get update
+    sudo apt-get upgrade
+
+2. install Nvidia Driver
+This is one main pitfall here: if you system is using the Nvidia gpu during installation, you will see a lot of bugs in future. Also,if you system does not have an integrated gpu, you will not be able to see the display before installation of nvidia driver. To address these issues:
+1). block nouveau driver
+
+    sudo gedit /etc/modprobe.d/blacklist.conf
+
+append the following at the conf file
+
+    blacklist nouveau
+    options nouveau modeset=0
+save the conf, run 
+    sudo update-initramfs -u
+
+shutdown the x-window
+press ctrl+Alt+F1 
+type:   
+    sudo service lightdm stop
+
+
+Next, install Nvidia Driver:
+    sudo add-apt-repository ppa:graphics-drivers/ppa
+    sudo apt-get update
+    sudo apt-get install nvidia-384
+    sudo apt-get install mesa-common-dev
+    sudo apt-get install freeglut3-dev
+
+reboot the system
+
+3. Install CUDA 8.0
+Go to https://developer.nvidia.com/cuda-80-ga2-download-archive
+to download CUDA toolkit 8.0
+select:
+Linux, x86-64,Ubuntu, 16.04,runfile(local)
+Download the basic installation file and patch 2 file
+
+First install the basic file by:
+
+    sudo sh cuda_8.0.61_375.26_linux.run
+
+Then install the patch 2 by sudo sh ...
+
+Finally, remember to export the path into PAth environment
+    nano ~/.bashrc
+append the following commands to the file
+    export PATH=/usr/local/cuda-8.0/bin\${PATH:+:\${PATH}}
+    export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}
+
+Test the installation by typing:
+nvidia-smi
+
+４．　install cuDNN
+Go to https://developer.nvidia.com/rdp/cudnn-download
+register and download cuDNN 6.0
+untar the cuDNN file, copy the files to cuda
+    sudo cp cuda/include/cudnn.h /usr/local/cuda/include/
+    sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/
+    sudo chmod a+r /usr/local/cuda/include/cudnn.h
+    sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
+
+5. install anaconda
+
+
+
+6. install tensorflow gpu
+follow the instruction in https://www.tensorflow.org/install/install_linux
+Here is a quick guide for ubuntu 16.04
+
+
+    
+References:
+1. http://www.52nlp.cn/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%BB%E6%9C%BA%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-ubuntu-16-04-nvidia-gtx-1080-cuda-8
+2. http://www.52nlp.cn/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%BB%E6%9C%BA%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-ubuntu16-04-geforce-gtx1080-tensorflow
+3. http://blog.csdn.net/cosmoshua/article/details/76644029
